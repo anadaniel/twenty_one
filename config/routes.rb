@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  devise_for :users
   # Change the line below to handle every request through a subdomain
   #namespace :api, constraints: { subdomain: 'api' }, path: '/' do
 
