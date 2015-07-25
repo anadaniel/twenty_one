@@ -9,7 +9,7 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
           post :create, { email: @new_user.email, password: @new_user.password  }
         end
 
-        it { should respond_with 200 }
+        it { should respond_with :ok }
         it { expect(json_response).to have_key(:auth_token) }
 
         it "creates a user and returns the auth token for that user" do
@@ -23,7 +23,7 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
           post :create, { email: "invalid email", password: "123456"  }
         end
 
-        it { should respond_with 422 }
+        it { should respond_with :unprocessable_entity }
         it { expect(json_response).to have_key(:errors) }
       end
 
@@ -33,7 +33,7 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
           post :create, { email: @new_user.email } #no password
         end
 
-        it { should respond_with 422 }
+        it { should respond_with :unprocessable_entity }
         it { expect(json_response).to have_key(:errors) }
       end
     end
@@ -45,7 +45,7 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
           post :create, { email: @existing_user.email, password: @existing_user.password  }
         end
 
-        it { should respond_with 200 }
+        it { should respond_with :ok }
         it { expect(json_response).to have_key(:auth_token) }
 
         it "returns the auth token for the existing user" do
@@ -60,9 +60,35 @@ RSpec.describe Api::V1::SessionsController, :type => :controller do
           post :create, { email: @existing_user.email, password: "wrongpassword"  }
         end
 
-        it { should respond_with 422 }
+        it { should respond_with :unprocessable_entity }
         it { expect(json_response).to have_key(:errors) }
       end
+    end
+  end
+
+  describe "DELETE #destroy" do
+    context "when the user is authenticated" do
+      before(:each) do
+        @user = FactoryGirl.create :user
+        @old_token = @user.auth_token
+        api_authorization_header( @user.auth_token )
+        delete :destroy
+      end
+
+      it "should reset the user's auth token" do
+        @user.reload
+        expect(@user.auth_token).to_not eql @old_token
+      end
+
+      it { should respond_with :no_content }
+    end
+
+    context "when the user is not authenticated" do
+      before(:each) do
+        delete :destroy
+      end
+
+      it { should respond_with :unauthorized }
     end
   end
 end
