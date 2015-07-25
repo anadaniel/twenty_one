@@ -22,6 +22,18 @@ class Api::V1::HabitsController < ApplicationController
     end    
   end
 
+  def mark
+    habit = current_user.habits.find params[:id]
+
+    unless params[:response].nil? || params[:date].nil? || habit.nil?
+      habit.mark(params[:response], params[:date])
+
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
     def habits_params
       params.require(:habit).permit(:title, :goal_type, :category, :partner_name, :partner_email)

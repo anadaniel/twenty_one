@@ -9,6 +9,10 @@ Rails.application.routes.draw do
         collection do
           get :current
         end
+
+        member do
+          post :mark
+        end
       end
     end
   end
