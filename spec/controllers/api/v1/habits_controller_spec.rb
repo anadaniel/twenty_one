@@ -115,5 +115,16 @@ RSpec.describe Api::V1::HabitsController, :type => :controller do
         it { expect(@start_habit.last_date).to eq nil }
       end
     end
+
+    context "when its the first mark of an habit" do
+      before do
+        @new_habit = FactoryGirl.create :start_habit, user: @user, active: true
+        post :mark, { id: @new_habit.id, response: "yes", date: "#{Date.today.strftime("%Y-%m-%d")}" }
+        @new_habit.reload
+      end
+
+      it { should respond_with :ok }
+      it { expect(@new_habit.start_date).to eq Date.today }
+    end
   end
 end

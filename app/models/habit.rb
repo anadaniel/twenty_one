@@ -3,12 +3,18 @@ class Habit < ActiveRecord::Base
 
   belongs_to :user
 
+  before_save :set_start_date, if: Proc.new { |habit| habit.start_date.nil? and habit.last_date.present? }
+
   ANSWERS = {
     "yes" => "positive",
     "start" => "positive",
     "no" => "negative",
     "stop" => "negative"
   }
+
+  def set_start_date
+    self.start_date = self.last_date
+  end
 
   def make_current!
     current = self.user.habits.find_by(active: true)
@@ -19,12 +25,23 @@ class Habit < ActiveRecord::Base
 
   def mark(response, date)
     if ANSWERS[response] == ANSWERS[goal_type]
-      self.last_date = Date.parse(date)
-      self.status = "ongoing"
+      self.mark_success(date)
     else
-      self.last_date = nil
-      self.status = "failed"
+      self.fail_habit
     end
+  end
+
+  def mark_success(date)
+    self.last_date = Date.parse(date)
+    self.status = "ongoing"
+
+    self.save
+  end
+
+  def fail_habit
+    self.last_date = nil
+    self.start_date = nil
+    self.status = "failed"
 
     self.save
   end
