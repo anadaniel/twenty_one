@@ -1,5 +1,5 @@
 class Api::V1::HabitsController < ApplicationController
-  before_action :authenticate_with_token!, only: [:destroy]
+  before_action :authenticate_with_token!
 
   def create
     habit = current_user.habits.build habits_params
@@ -10,6 +10,16 @@ class Api::V1::HabitsController < ApplicationController
     else
       head :unprocessable_entity
     end
+  end
+
+  def current
+    habit = current_user.habits.find_by active: true
+
+    if habit.present?
+      render json: habit, status: :ok
+    else
+      head :no_content
+    end    
   end
 
   private
