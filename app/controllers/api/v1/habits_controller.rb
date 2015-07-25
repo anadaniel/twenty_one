@@ -34,6 +34,17 @@ class Api::V1::HabitsController < ApplicationController
     end
   end
 
+  def fail
+    habit = current_user.habits.find params[:id]
+
+    if habit.present?
+      habit.fail_habit
+      head :ok
+    else
+      head :unprocessable_entity
+    end    
+  end
+
   private
     def habits_params
       params.require(:habit).permit(:title, :goal_type, :category, :partner_name, :partner_email)

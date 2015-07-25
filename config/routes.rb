@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
         member do
           post :mark
+          post :fail
         end
       end
     end

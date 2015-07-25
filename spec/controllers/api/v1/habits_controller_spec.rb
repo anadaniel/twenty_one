@@ -127,4 +127,23 @@ RSpec.describe Api::V1::HabitsController, :type => :controller do
       it { expect(@new_habit.start_date).to eq Date.today }
     end
   end
+
+  describe "POST #fail" do
+    before do
+      @habit = FactoryGirl.create :start_habit, user: @user, 
+                                                      active: true, 
+                                                      start_date: Date.yesterday,
+                                                      last_date: Date.yesterday,
+                                                      status: "ongoing"
+
+      post :fail, { id: @habit.id }
+
+      @habit.reload
+    end
+
+    it { should respond_with :ok }
+    it { expect(@habit.status).to eq "failed" }
+    it { expect(@habit.last_date).to eq nil }
+    it { expect(@habit.start_date).to eq nil }
+  end
 end
