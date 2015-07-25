@@ -27,4 +27,22 @@ RSpec.describe Habit, :type => :model do
   context 'associations' do
     it { is_expected.to belong_to(:user) }
   end
+
+  context 'instance methods' do
+    describe '#make_current!' do
+      before do
+        user = FactoryGirl.create :user
+        @old_current = FactoryGirl.create :start_habit, active: true, user: user
+        @new_current = FactoryGirl.create :start_habit, active: false, user: user
+
+        @new_current.make_current!
+
+        @old_current.reload
+        @new_current.reload
+      end
+
+      it { expect(@new_current.active).to be true }
+      it { expect(@old_current.active).to be false }
+    end
+  end
 end

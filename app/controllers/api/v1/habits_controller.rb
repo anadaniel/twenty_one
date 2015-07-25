@@ -5,6 +5,7 @@ class Api::V1::HabitsController < ApplicationController
     habit = current_user.habits.build habits_params
 
     if habit.save
+      habit.make_current!
       head :created
     else
       head :unprocessable_entity
