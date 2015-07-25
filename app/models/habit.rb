@@ -45,4 +45,10 @@ class Habit < ActiveRecord::Base
 
     self.save
   end
+
+  def successful_days
+    return 0 if self.start_date.nil?
+
+    (self.last_date - self.start_date).to_i + 1
+  end
 end
