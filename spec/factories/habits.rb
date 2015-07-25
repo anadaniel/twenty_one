@@ -7,6 +7,7 @@ FactoryGirl.define do
     start_date { Date.yesterday }
     last_date { Date.today }
     active true
+    user { FactoryGirl.create :user }
     
     factory :start_habit do
       goal_type "start"

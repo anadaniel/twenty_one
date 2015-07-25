@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
 
   validates :auth_token, uniqueness: true
 
+  has_many :habits
+
   before_create :generate_authentication_token!
 
   def generate_authentication_token!

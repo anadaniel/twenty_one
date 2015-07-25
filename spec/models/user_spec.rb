@@ -5,15 +5,19 @@ RSpec.describe User, :type => :model do
 
   subject { user }
 
-  context "attributes" do
+  context 'attributes' do
     it { is_expected.to respond_to(:email) }
     it { is_expected.to respond_to(:password) }
     it { is_expected.to respond_to(:password_confirmation) }
     it { is_expected.to respond_to(:auth_token) }
   end
 
-  context "validations" do
+  context 'validations' do
     it { is_expected.to validate_uniqueness_of(:auth_token) }
+  end
+
+  context 'associations' do
+    it { is_expected.to have_many(:habits) }
   end
 
   context "#methods" do
