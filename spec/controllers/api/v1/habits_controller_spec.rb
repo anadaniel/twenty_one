@@ -72,8 +72,19 @@ RSpec.describe Api::V1::HabitsController, :type => :controller do
         end
 
         it { should respond_with :ok }
-        #it { expect(@start_habit.status).to eq "ongoing" }
+        it { expect(@start_habit.status).to eq "ongoing" }
         it { expect(@start_habit.last_date).to eq Date.today }
+      end
+
+      context "and the answer is no" do
+        before do
+          post :mark, { id: @start_habit.id, response: "no", date: "#{Date.today.strftime("%Y-%m-%d")}" }
+          @start_habit.reload
+        end
+
+        it { should respond_with :ok }
+        it { expect(@start_habit.status).to eq "failed" }
+        it { expect(@start_habit.last_date).to eq nil }
       end
     end
 
@@ -89,8 +100,19 @@ RSpec.describe Api::V1::HabitsController, :type => :controller do
         end
 
         it { should respond_with :ok }
-        #it { expect(@start_habit.status).to eq "ongoing" }
+        it { expect(@start_habit.status).to eq "ongoing" }
         it { expect(@start_habit.last_date).to eq Date.today }
+      end
+
+      context "and the answer is yes" do
+        before do
+          post :mark, { id: @start_habit.id, response: "yes", date: "#{Date.today.strftime("%Y-%m-%d")}" }
+          @start_habit.reload
+        end
+
+        it { should respond_with :ok }
+        it { expect(@start_habit.status).to eq "failed" }
+        it { expect(@start_habit.last_date).to eq nil }
       end
     end
   end

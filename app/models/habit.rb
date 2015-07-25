@@ -20,8 +20,12 @@ class Habit < ActiveRecord::Base
   def mark(response, date)
     if ANSWERS[response] == ANSWERS[goal_type]
       self.last_date = Date.parse(date)
+      self.status = "ongoing"
+    else
+      self.last_date = nil
+      self.status = "failed"
     end
-    
+
     self.save
   end
 end
