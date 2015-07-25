@@ -15,6 +15,7 @@ RSpec.describe Habit, :type => :model do
     it { is_expected.to respond_to(:active) }
     it { is_expected.to respond_to(:goal_type) }
     it { is_expected.to respond_to(:user_id) }
+    it { is_expected.to respond_to(:status) }
   end
 
   context 'validations' do
@@ -42,6 +43,7 @@ RSpec.describe Habit, :type => :model do
       end
 
       it { expect(@new_current.active).to be true }
+      it { expect(@new_current.status).to eq "ongoing" }
       it { expect(@old_current.active).to be false }
     end
   end

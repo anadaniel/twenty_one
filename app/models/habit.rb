@@ -14,13 +14,14 @@ class Habit < ActiveRecord::Base
     current = self.user.habits.find_by(active: true)
 
     current.update_attribute(:active, false) if current.present?
-    self.update_attribute(:active, true)
+    self.update_attributes(active: true, status: "ongoing")
   end
 
   def mark(response, date)
     if ANSWERS[response] == ANSWERS[goal_type]
       self.last_date = Date.parse(date)
     end
+    
     self.save
   end
 end
