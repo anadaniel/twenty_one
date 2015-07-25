@@ -13,3 +13,82 @@
  *= require_tree .
  *= require_self
  */
+
+.logo{
+  width: 150px;
+  margin: 0 auto;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+.container{
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+.iphone{
+  width: 300px;
+}
+
+.left{
+  float: left;
+}
+
+h3{
+  color: #FB5643;
+  font-family: 'Raleway';
+  position: absolute;
+  width: 300px;
+}
+
+
+.step1 h3{
+  top: 170px;
+  left: 100px;
+
+}
+
+.step{
+  width: 100px;
+  position: absolute;
+}
+
+.step1 img{
+  top: 70px;
+  left: 200px;
+}
+
+
+.step2 img{
+  right: 200px;
+  top: 70px;
+}
+
+.step2 h3{
+  top: 170px;
+  right: 100px;
+}
+
+.step3 img{
+  left: 250px;
+  bottom: 100px;
+}
+
+.step3 h3{
+  bottom: 20px;
+  left: 150px;
+}
+
+.step4 img{
+  right: 250px;
+  bottom: 80px;
+}
+
+.step4 h3{
+  right: 150px;
+  bottom: 20px;
+}
+
+
+
+
+
