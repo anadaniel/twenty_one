@@ -4,6 +4,7 @@ class Habit < ActiveRecord::Base
   belongs_to :user
 
   before_save :set_start_date, if: Proc.new { |habit| habit.start_date.nil? and habit.last_date.present? }
+  after_save :check_if_completed, if: Proc.new { |habit| habit.start_date.present? and habit.last_date.present? }
 
   ANSWERS = {
     "yes" => "positive",
@@ -14,6 +15,10 @@ class Habit < ActiveRecord::Base
 
   def set_start_date
     self.start_date = self.last_date
+  end
+
+  def check_if_completed
+    self.update_column(:status, "completed") if successful_days >= 21
   end
 
   def make_current!

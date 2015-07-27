@@ -47,4 +47,36 @@ RSpec.describe Habit, :type => :model do
       it { expect(@old_current.active).to be false }
     end
   end
+
+  context 'callbacks' do
+    describe '#check_if_completed' do
+      before { @habit = FactoryGirl.create :start_habit, status: 'ongoing' }
+      
+      context 'when 21 days have passed' do
+        before do
+          @habit.start_date = 20.days.ago.to_date
+          @habit.last_date = Date.today
+
+          @habit.save
+        end
+
+        it "sets the status to 'completed'" do
+          expect(@habit.status).to eq 'completed'
+        end
+      end
+
+      context 'when 21 days have not passed' do
+        before do
+          @habit.start_date = 19.days.ago.to_date
+          @habit.last_date = Date.today
+
+          @habit.save
+        end
+
+        it "leaves the status as ongoing" do
+          expect(@habit.status).to eq 'ongoing'
+        end
+      end
+    end
+  end
 end
